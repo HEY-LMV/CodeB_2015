@@ -67,7 +67,7 @@ class myThread (threading.Thread):
                         print(ratio)
                         print(companies[comp].current_dividend_ratio())
 
-                        if(companies[comp].netWorthShouldBuy() and ratio < 2.2 and cashAvailable > 50):
+                        if(companies[comp].netWorthShouldBuy() and ratio < 2):
                             for i in range(1,5):
                                 ratio = float(companies[comp].ideal_askCost())/float(companies[comp].ideal_bidCost())
                                 clientpy2.bid(companies[comp].getTicker(),companies[comp].ideal_askCost(),companies[comp].ideal_askAmount())
@@ -79,7 +79,7 @@ class myThread (threading.Thread):
                                 if(ratio > 1.5):
                                     break
 
-                        elif((float(companies[comp].current_dividend_ratio()) < float(.005) and float(companies[comp].current_dividend_ratio()) != float(0.0)) or cashAvailable < 50):
+                        elif((float(companies[comp].current_dividend_ratio()) < float(.005) and float(companies[comp].current_dividend_ratio()) != float(0.0))):
                             print("selling")
                             clientpy2.ask(companies[comp].getTicker(),companies[comp].ideal_bidCost(),companies[comp].ideal_bidAmount())
 
