@@ -18,6 +18,9 @@ class myThread (threading.Thread):
 
             while(True):
                 securitiesAvailable = clientpy2.securitiesAvailable()
+                cash = clientpy2.myCash().split()
+                cashAvailable = float(cash[1])
+                print(cashAvailable)
                 securitiesAvailableArray = securitiesAvailable.split()
                 for i in range(1,len(securitiesAvailableArray),4):
 
@@ -41,20 +44,44 @@ class myThread (threading.Thread):
                     companies[securitiesAvailableArray[i]].set_bid(bidCost,bidAmount)
                     companies[securitiesAvailableArray[i]].set_ask(askCost,askAmount)
 
+                divRatio = clientpy2.mySecurities()
+                divRatioArray = divRatio.split()
+                for j in range(1,len(divRatioArray),3):
+                    companies[divRatioArray[j]].add_dividend_ratio(divRatioArray[j+2])
+                    print("divRatio")
+                    print(divRatioArray[j+2])
+
                 for comp in companies:
                     if(companies[comp].haveEnoughData):
                         print(companies[comp].getTicker())
                         ratio = float(companies[comp].ideal_askCost())/float(companies[comp].ideal_bidCost())
                         print("netWorthShouldBuy:  " + str(companies[comp].netWorthShouldBuy()))
-                        if(companies[comp].netWorthShouldBuy() and ratio < 2):
-                            clientpy2.bid(companies[comp].getTicker(),companies[comp].ideal_askCost(),companies[comp].ideal_askAmount())
-                            print(companies[comp].getTicker())
-                            print(companies[comp].ideal_askCost())
-                            print(companies[comp].ideal_askAmount())
-                            print("Should Buy")
-                            companies[comp].printStock()
-                        # else:
-                            # clientpy2.ask(companies[comp].getTicker(),companies[comp].ideal_bidCost(),companies[comp].current_bidAmount[0])
+                        print("Ratio")
+                        print(ratio)
+                        print(companies[comp].current_dividend_ratio())
+
+                        if(companies[comp].netWorthShouldBuy() and ratio < 2.2 and cashAvailable > 50):
+                            for i in range(1,5):
+                                ratio = float(companies[comp].ideal_askCost())/float(companies[comp].ideal_bidCost())
+                                clientpy2.bid(companies[comp].getTicker(),companies[comp].ideal_askCost(),companies[comp].ideal_askAmount())
+                                print(companies[comp].getTicker())
+                                print(companies[comp].ideal_askCost())
+                                print(companies[comp].ideal_askAmount())
+                                print(ratio)
+                                companies[comp].printStock()
+                                if(ratio > 1.5):
+                                    break
+
+                        elif((float(companies[comp].current_dividend_ratio()) < float(.005) and float(companies[comp].current_dividend_ratio()) != float(0.0)) or cashAvailable < 50):
+                            print("selling")
+                            clientpy2.ask(companies[comp].getTicker(),companies[comp].ideal_bidCost(),companies[comp].ideal_bidAmount())
+
+                        else:
+                            clientpy2.ask(companies[comp].getTicker(),companies[comp].ideal_bidCost(),companies[comp].ideal_bidAmount())
+
+                        #giveAway on of this array
+                        #giveaway = float(companies[comp].ideal_bidCost()) + .5
+                        #clientpy2.ask(companies[comp].getTicker(), str(giveaway), "1")
                     # companies[securitiesAvailableArray[i]].printStock()
 
 
