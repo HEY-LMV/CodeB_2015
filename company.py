@@ -13,8 +13,7 @@ class Company:
 
 	def add_net_worth(self, net_worth):
 		self.net_worth.append(net_worth)
-		if(len(self.net_worth)%10 == 0):
-			print("ADD")
+		if(len(self.net_worth)%5 == 0):
 			self.slope.append(net_worth)
 
 	def add_dividend_ratio(self, dividend_ratio):
@@ -39,6 +38,12 @@ class Company:
 
 	def ideal_askCost(self):
 		return self.askCost[0]
+
+	def ideal_bidAmount(self):
+		return self.bidAmount[len(self.bidAmount)-1]
+
+	def ideal_askAmount(self):
+		return self.askAmount[0]
 
 	def current_bidCost(self):
 		return self.bidCost
@@ -65,12 +70,6 @@ class Company:
 		if(len(self.slope) < 5):
 			print("---- Just print False ----")
 			return False
-
-		print(self.slope[len(self.slope)-1])
-		print(self.slope[len(self.slope)-2])
-		print(self.slope[len(self.slope)-3])
-		print(self.slope[len(self.slope)-4])
-		print(self.slope[len(self.slope)-5])
 
 		z = float(self.slope[len(self.slope)-1])
 		y = float(self.slope[len(self.slope)-2])

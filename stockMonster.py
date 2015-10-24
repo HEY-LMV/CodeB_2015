@@ -41,21 +41,23 @@ class myThread (threading.Thread):
                     companies[securitiesAvailableArray[i]].set_bid(bidCost,bidAmount)
                     companies[securitiesAvailableArray[i]].set_ask(askCost,askAmount)
 
-        else :
-            time.sleep(self.counter)
-            print("hey?")
-
-            while(True):
-
                 for comp in companies:
                     if(companies[comp].haveEnoughData):
                         print(companies[comp].getTicker())
                         ratio = float(companies[comp].ideal_askCost())/float(companies[comp].ideal_bidCost())
-                        print("ratio " + str(ratio))
-                        print("netWorthShouldBuy" + str(companies[comp].netWorthShouldBuy()))
+                        print("netWorthShouldBuy:  " + str(companies[comp].netWorthShouldBuy()))
+                        if(companies[comp].netWorthShouldBuy() and ratio < 2):
+                            clientpy2.bid(companies[comp].getTicker(),companies[comp].ideal_askCost(),companies[comp].ideal_askAmount())
+                            print(companies[comp].getTicker())
+                            print(companies[comp].ideal_askCost())
+                            print(companies[comp].ideal_askAmount())
+                            print("Should Buy")
+                            companies[comp].printStock()
+                        # else:
+                            # clientpy2.ask(companies[comp].getTicker(),companies[comp].ideal_bidCost(),companies[comp].current_bidAmount[0])
+                    # companies[securitiesAvailableArray[i]].printStock()
 
 
-                companies[securitiesAvailableArray[i]].printStock()
         # Free lock to release next thread
         # threadLock.release()
 
@@ -73,12 +75,10 @@ def startApp():
 
     # Start new Threads
     thread1.start()
-    thread2.start()
     # thread2.start()
 
     # Add threads to thread list
     threads.append(thread1)
-    threads.append(thread2)
     # threads.append(thread2)
 
 threadLock = threading.Lock()
@@ -87,7 +87,7 @@ threads = []
 
 # Create new threads
 thread1 = myThread(1, "UpdateThread", 1)
-thread2 = myThread(2, "BuyThread", 2)
+# thread2 = myThread(2, "BuyThread", 2)
 
 companies = {}
 startApp()
