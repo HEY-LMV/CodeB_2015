@@ -12,37 +12,52 @@ class myThread (threading.Thread):
 
     def run(self):
         print "Starting " + self.name
-        threadLock.acquire()
+        # threadLock.acquire()
 
-        while(True):
+        if(self.counter == 1 ):
+
+            while(True):
+                securitiesAvailable = clientpy2.securitiesAvailable()
+                securitiesAvailableArray = securitiesAvailable.split()
+                for i in range(1,len(securitiesAvailableArray),4):
+
+                    companies[securitiesAvailableArray[i]].add_net_worth(securitiesAvailableArray[i+1])
+                    companies[securitiesAvailableArray[i]].add_dividend_ratio(securitiesAvailableArray[i+2])
+
+                    order = clientpy2.ordersFor(securitiesAvailableArray[i])
+                    orderArray = order.split()
+                    bidCost = []
+                    bidAmount = []
+                    askCost = []
+                    askAmount = []
+                    for j in range(1,len(orderArray),4):
+                        if(orderArray[j] == "BID"):
+                            bidCost.append(orderArray[j+2])
+                            bidAmount.append(orderArray[j+3])
+                        else:
+                            askCost.append(orderArray[j+2])
+                            askAmount.append(orderArray[j+3])
+
+                    companies[securitiesAvailableArray[i]].set_bid(bidCost,bidAmount)
+                    companies[securitiesAvailableArray[i]].set_ask(askCost,askAmount)
+
+        else :
             time.sleep(self.counter)
-            securitiesAvailable = clientpy2.securitiesAvailable()
-            securitiesAvailableArray = securitiesAvailable.split()
-            for i in range(1,len(securitiesAvailableArray),4):
+            print("hey?")
 
-                companies[securitiesAvailableArray[i]].add_net_worth(securitiesAvailableArray[i+1])
-                companies[securitiesAvailableArray[i]].add_dividend_ratio(securitiesAvailableArray[i+2])
+            while(True):
 
-                order = clientpy2.ordersFor(securitiesAvailableArray[i])
-                orderArray = order.split()
-                bidCost = []
-                bidAmount = []
-                askCost = []
-                askAmount = []
-                for j in range(1,len(orderArray),4):
-                    if(orderArray[j] == "BID"):
-                        bidCost.append(orderArray[j+2])
-                        bidAmount.append(orderArray[j+3])
-                    else:
-                        askCost.append(orderArray[j+2])
-                        askAmount.append(orderArray[j+3])
+                for comp in companies:
+                    if(companies[comp].haveEnoughData):
+                        print(companies[comp].getTicker())
+                        ratio = float(companies[comp].ideal_askCost())/float(companies[comp].ideal_bidCost())
+                        print("ratio " + str(ratio))
+                        print("netWorthShouldBuy" + str(companies[comp].netWorthShouldBuy()))
 
-                companies[securitiesAvailableArray[i]].set_bid(bidCost,bidAmount)
-                companies[securitiesAvailableArray[i]].set_ask(askCost,askAmount)
 
                 companies[securitiesAvailableArray[i]].printStock()
         # Free lock to release next thread
-        threadLock.release()
+        # threadLock.release()
 
 def startApp():
 
@@ -58,10 +73,12 @@ def startApp():
 
     # Start new Threads
     thread1.start()
+    thread2.start()
     # thread2.start()
 
     # Add threads to thread list
     threads.append(thread1)
+    threads.append(thread2)
     # threads.append(thread2)
 
 threadLock = threading.Lock()
@@ -70,7 +87,7 @@ threads = []
 
 # Create new threads
 thread1 = myThread(1, "UpdateThread", 1)
-# thread2 = myThread(2, "Thread-2", 2)
+thread2 = myThread(2, "BuyThread", 2)
 
 companies = {}
 startApp()
