@@ -13,26 +13,51 @@ def run(user, password, *commands):
         sock.sendall(data)
         sfile = sock.makefile()
         rline = sfile.readline()
+        empty = ""
         while rline:
-            print(rline.strip())
+            empty += rline.strip()
             rline = sfile.readline()
+        return empty
     finally:
         sock.close()
 
-def subscribe(user, password):
-    HOST, PORT = "codebb.cloudapp.net", 17429
+def help():
+    #run("admin", "topbanana0918", "BID EA 10.2 1")
+    return run("admin","topbanana0918","HELP")
 
-    data=user + " " + password + "\nSUBSCRIBE\n"
+def bid(ticker,price,amount):
+    #run("admin", "topbanana0918", "BID EA 10.2 1")
+    return run("admin","topbanana0918","BID " + ticker + " " + price + " " + amount)
 
-    try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def ask(ticker,price,amount):
+    #run("admin", "topbanana0918", "ASK EA 10.2 1")
+    return run("admin","topbanana0918","ASK " + ticker + " " + price + " " + amount)
 
-        sock.connect((HOST, PORT))
-        sock.sendall(data)
-        sfile = sock.makefile()
-        rline = sfile.readline()
-        while rline:
-            print(rline.strip())
-            rline = sfile.readline()
-    finally:
-        sock.close()
+def securitiesAvailable():
+    #run("admin", "topbanana0918", "ASK EA 10.2 1")
+    return run("admin","topbanana0918","SECURITIES")
+
+def ordersFor(ticker):
+    return run("admin","topbanana0918","ORDERS " + ticker)
+
+def mySecurities():
+    #run("admin", "topbanana0918", "ASK EA 10.2 1")
+    return run("admin","topbanana0918","MY_SECURITIES")
+
+def myOrders(ticker):
+    return run("admin","topbanana0918","ORDERS " + ticker)
+
+def myCash():
+    return run("admin","topbanana0918","MY_CASH")
+
+def deleteBid(ticker):
+    return run("admin","topbanana0918","CLEAR_BID " + ticker)
+
+def deleteAsk(ticker):
+    return run("admin","topbanana0918","CLEAR_ASK " + ticker)
+
+def subscribe(yesOrNo):
+    if(yesOrNo):
+        return run("admin","topbanana0918","SUBSCRIBE")
+    else:
+        return run("admin","topbanana0918","UNSUBSCRIBE")
