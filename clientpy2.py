@@ -21,7 +21,9 @@ def run(user, password, *commands):
     finally:
         sock.close()
 
-def subscribe(user, password):
+    return rline
+
+def tsubscribe(user, password):
     HOST, PORT = "codebb.cloudapp.net", 17429
     data=user + " " + password + "\nSUBSCRIBE\n"
 
