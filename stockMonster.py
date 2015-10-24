@@ -16,8 +16,7 @@ class myThread (threading.Thread):
 
         while(True):
             time.sleep(self.counter)
-            clientpy2.run("admin", "topbanana0918", "SECURITIES")
-
+            print (clientpy2.securitiesAvailable())
         # Free lock to release next thread
         threadLock.release()
 
