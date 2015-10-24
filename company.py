@@ -38,3 +38,9 @@ class Company:
 
 	def current_askAmount():
 		return self.askAmount
+
+	def printStock(self):
+		print("Name: " + self.ticker)
+		print("Net Worth: " + self.net_worth[len(self.net_worth)-1])
+		print("Div Ratio: " + self.dividend_ratio[len(self.dividend_ratio)-1])
+		print("Volatility: " + self.volatility)

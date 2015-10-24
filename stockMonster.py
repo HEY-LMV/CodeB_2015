@@ -40,6 +40,7 @@ class myThread (threading.Thread):
                 companies[securitiesAvailableArray[i]].set_bid(bidCost,bidAmount)
                 companies[securitiesAvailableArray[i]].set_ask(askCost,askAmount)
 
+                companies[securitiesAvailableArray[i]].printStock()
         # Free lock to release next thread
         threadLock.release()
 
