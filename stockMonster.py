@@ -2,6 +2,10 @@ import threading
 import time
 import company
 import clientpy2
+import ui
+# import pygame
+# from pygame.locals import *
+
 
 class myThread (threading.Thread):
     def __init__(self, threadID, name, counter):
@@ -9,7 +13,7 @@ class myThread (threading.Thread):
         self.threadID = threadID
         self.name = name
         self.counter = counter
-
+        self.gui = ui.UI()
     def run(self):
         print "Starting " + self.name
         # threadLock.acquire()
@@ -20,11 +24,12 @@ class myThread (threading.Thread):
                 securitiesAvailable = clientpy2.securitiesAvailable()
                 cash = clientpy2.myCash().split()
                 cashAvailable = float(cash[1])
-                print(cashAvailable)
                 securitiesAvailableArray = securitiesAvailable.split()
+                toUI = []
                 for i in range(1,len(securitiesAvailableArray),4):
 
                     companies[securitiesAvailableArray[i]].add_net_worth(securitiesAvailableArray[i+1])
+                    toUI.append(float(securitiesAvailableArray[i+1])/1000000)
                     companies[securitiesAvailableArray[i]].add_dividend_ratio(securitiesAvailableArray[i+2])
 
                     order = clientpy2.ordersFor(securitiesAvailableArray[i])
@@ -50,6 +55,8 @@ class myThread (threading.Thread):
                     companies[divRatioArray[j]].add_dividend_ratio(divRatioArray[j+2])
                     print("divRatio")
                     print(divRatioArray[j+2])
+
+                self.gui.run(toUI)
 
                 for comp in companies:
                     if(companies[comp].haveEnoughData):
@@ -99,6 +106,7 @@ def startApp():
                                 securitiesAvailableArray[i+2],
                                 securitiesAvailableArray[i+3])
         companies[securitiesAvailableArray[i]] = comp
+
 
     # Start new Threads
     thread1.start()
