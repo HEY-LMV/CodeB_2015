@@ -1,14 +1,11 @@
-import stockMonster
 
 class Company:
 
-	def _init_(ticker, net_worth, dividend_ratio, volatility, bid, ask):
+	def __init__(self, ticker, net_worth, dividend_ratio, volatility):
 		self.ticker = ticker
 		self.net_worth = [net_worth]
 		self.dividend_ratio = [dividend_ratio]
 		self.volatility = volatility
-		self.bid = [bid]
-		self.ask = [ask]
 
 	def add_net_worth(self, net_worth):
 		self.net_worth.append(net_worth)
@@ -16,20 +13,28 @@ class Company:
 	def add_dividend_ratio(self, dividend_ratio):
 		self.dividend_ratio.append(dividend_ratio)
 
-	def add_bid(self, bid):
-		self.bid.append(bid)
+	def set_bid(self, bidCost, bidAmount):
+		self.bidCost = bidCost
+		self.bidAmount = bidAmount
 
-	def add_bid(self, ask):
-		self.ask.append(ask)
+	def set_ask(self, askCost, askAmount):
+		self.askCost = askCost
+		self.askAmount = askAmount
 
-	def current_net_worth():
-		return self.net_worth[net_worth._len_()]
+	def current_net_worth(self):
+		return self.net_worth[len(self.net_worth)-1]
 
-	def current_dividend_ratio():
-		return self.dividend_ratio[dividend_ratio._len_()]
+	def current_dividend_ratio(self):
+		return self.dividend_ratio[len(self.dividend_ratio)-1]
 
-	def current_bid():
-		return self.bid[bid._len_()]
+	def current_bidCost():
+		return self.bidCost
 
-	def current_ask():
-		return self.ask[ask._len_()]
+	def current_bidAmount():
+		return self.bidAmount
+
+	def current_askCost():
+		return self.askCost
+
+	def current_askAmount():
+		return self.askAmount
