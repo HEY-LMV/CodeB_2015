@@ -21,6 +21,22 @@ def run(user, password, *commands):
     finally:
         sock.close()
 
+def subscribe(user, password):
+    HOST, PORT = "codebb.cloudapp.net", 17429
+    data=user + " " + password + "\nSUBSCRIBE\n"
+
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((HOST, PORT))
+        sock.sendall(data)
+        sfile = sock.makefile()
+        rline = sfile.readline()
+        while rline:
+            print(rline.strip())
+            rline = sfile.readline()
+    finally:
+        sock.close()
+
 def help():
     #run("admin", "topbanana0918", "BID EA 10.2 1")
     return run("admin","topbanana0918","HELP")
@@ -56,8 +72,8 @@ def deleteBid(ticker):
 def deleteAsk(ticker):
     return run("admin","topbanana0918","CLEAR_ASK " + ticker)
 
-def subscribe(yesOrNo):
+def subscribes(yesOrNo):
     if(yesOrNo):
-        return run("admin","topbanana0918","SUBSCRIBE")
+        subscribe("admin","topbanana0918")
     else:
         return run("admin","topbanana0918","UNSUBSCRIBE")

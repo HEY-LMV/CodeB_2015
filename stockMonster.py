@@ -16,12 +16,32 @@ class myThread (threading.Thread):
 
         while(True):
             time.sleep(self.counter)
-            print (clientpy2.securitiesAvailable())
+            securitiesAvailable = clientpy2.securitiesAvailable()
+            securitiesAvailableArray = securitiesAvailable.split()
+            for i in range(1,len(securitiesAvailableArray),4):
+                print("")
+                print("")
+                print(securitiesAvailableArray[i])
+                print(securitiesAvailableArray[i+1])
+                print(securitiesAvailableArray[i+2])
+                print(securitiesAvailableArray[i+3])
+                order = clientpy2.ordersFor(securitiesAvailableArray[i])
+                orderArray = order.split()
+                for j in range(1,len(orderArray),4):
+                    if(orderArray[j] == "BID"):
+                        print("BID")
+                        print(orderArray[j+2])
+                        print(orderArray[j+3])
+                    else:
+                        print("ASK")
+                        print(orderArray[j+2])
+                        print(orderArray[j+3])
+
         # Free lock to release next thread
         threadLock.release()
 
 
-def print_time(threadName, delay, counter):
+def print_tgime(threadName, delay, counter):
     while counter:
         time.sleep(delay)
         print "%s: %s" % (threadName, time.ctime(time.time()))
