@@ -1,9 +1,9 @@
 import socket
 import sys
-    
+
 def run(user, password, *commands):
     HOST, PORT = "codebb.cloudapp.net", 17429
-    
+
     data=user + " " + password + "\n" + "\n".join(commands) + "\nCLOSE_CONNECTION\n"
 
     try:
@@ -21,7 +21,7 @@ def run(user, password, *commands):
 
 def subscribe(user, password):
     HOST, PORT = "codebb.cloudapp.net", 17429
-    
+
     data=user + " " + password + "\nSUBSCRIBE\n"
 
     try:
